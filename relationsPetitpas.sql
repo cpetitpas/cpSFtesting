@@ -99,13 +99,16 @@ select rai.get_data_stream('cpsftesting.relationsPetitpas.auntUncleEdges');
 call rai.create_graph('auntUncleEdgesGraph', 'relationsPetitpas.auntUncleEdges');
 call rai.delete_graph('auntUncleEdgesGraph');
 
-select rai.num_edges('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdges' });
-select * from relationsPetitpas.auntUncleEdges;
-
-select rai.num_nodes('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdges' });
-select * from relationsPetitpas.auntUncleEdges;
+select * from table(rai.neighbor('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdgesNeighbor' }));
+SELECT LOOKUP(COL1):id as nieceNephewNode, LOOKUP(COL2):id as auntUncleNode FROM relationsPetitpas.auntUncleEdgesNeighbor
+    order by nieceNephewNode;
+select * from relationsPetitpas.auntUncleEdgesNeighbor;
 
 SELECT * from table(rai.degree('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdgesDegree' }));
 select * from relationsPetitpas.auntUncleEdgesDegree;
 SELECT LOOKUP(COL1):id as nieceNephew, COL2 as Degree FROM relationsPetitpas.auntUncleEdgesDegree
     order by Degree DESC;
+
+select * from table(rai.pagerank('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdgesPagerank' }));
+SELECT LOOKUP(COL1):id as name, COL2 as Pagerank FROM relationsPetitpas.auntUncleEdgesPagerank
+    order by Pagerank DESC;
