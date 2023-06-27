@@ -94,9 +94,8 @@ call rai.create_data_stream('relationsPetitpas.auntUncleEdges');
 call rai.delete_data_stream('relationsPetitpas.auntUncleEdges');
 select rai.get_data_stream('cpsftesting.relationsPetitpas.auntUncleEdges');
 
-//call rai.create_graph('auntUncleGraph', 'auntUncle');
-
-call rai.create_graph('auntUncleEdgesGraph', 'relationsPetitpas.auntUncleEdges');
+call rai.create_graph('auntUncleEdgesGraph', 'relationsPetitpas.auntUncleEdges', {'directed': TRUE});
+//call update_graph('auntUncleEdgesGraph', {'directed': TRUE});
 call rai.delete_graph('auntUncleEdgesGraph');
 
 select * from table(rai.neighbor('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdgesNeighbor' }));
@@ -112,3 +111,46 @@ SELECT LOOKUP(COL1):id as nieceNephew, COL2 as Degree FROM relationsPetitpas.aun
 select * from table(rai.pagerank('auntUncleEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.auntUncleEdgesPagerank' }));
 SELECT LOOKUP(COL1):id as name, COL2 as Pagerank FROM relationsPetitpas.auntUncleEdgesPagerank
     order by Pagerank DESC;
+
+    // entities and lookup for cousin
+    
+call create_entity('Cousin1', ['id']);
+call create_entity('Cousin2', ['id']);
+SELECT * FROM TABLE(RAI.LIST_ENTITIES());
+
+call create_lookup('Cousin1', 'relationsPetitpas.Cousin', 'Cousin1');
+call create_lookup('Cousin2', 'relationsPetitpas.Cousin', 'Cousin2');
+SELECT * FROM TABLE(RAI.LIST_LOOKUPS());
+
+CREATE or replace table relationsPetitpas.CousinEdges(source, target) AS (
+    SELECT cpsftesting.RAI.node('Cousin1', [Cousin1]), cpsftesting.RAI.node('Cousin2', [Cousin2])
+    FROM relationsPetitpas.Cousin
+);
+select * from relationsPetitpas.CousinEdges;
+
+call rai.create_data_stream('relationsPetitpas.CousinEdges');
+call rai.delete_data_stream('relationsPetitpas.CousinEdges');
+select rai.get_data_stream('cpsftesting.relationsPetitpas.CousinEdges');
+
+
+
+call rai.create_graph('CousinEdgesGraph', 'relationsPetitpas.CousinEdges');
+call rai.delete_graph('CousinEdgesGraph');
+
+select * from table(rai.neighbor('CousinEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.CousinEdgesNeighbor' }));
+SELECT LOOKUP(COL1):id as Cousin1Node, LOOKUP(COL2):id as Cousin2Node FROM relationsPetitpas.CousinEdgesNeighbor
+    order by Cousin1Node;
+select * from relationsPetitpas.CousinEdgesNeighbor;
+
+SELECT * from table(rai.degree('CousinEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.CousinEdgesDegree' }));
+select * from relationsPetitpas.CousinEdgesDegree;
+SELECT LOOKUP(COL1):id as Cousin1, COL2 as Degree FROM relationsPetitpas.CousinEdgesDegree
+    order by Degree DESC;
+
+select * from table(rai.pagerank('CousinEdgesGraph', { 'result_table': 'cpsftesting.relationsPetitpas.CousinEdgesPagerank' }));
+SELECT LOOKUP(COL1):id as name, COL2 as Pagerank FROM relationsPetitpas.CousinEdgesPagerank
+    order by Pagerank DESC;
+
+call rebuild_lookup_table();
+
+select list_graphs();
