@@ -1,0 +1,261 @@
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+
+!set variable_substitution=true
+
+use WAREHOUSE COMPUTE_WH;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+USE DATABASE CPSFTESTING;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+
+!load setup.sql
+use schema RAI;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+call rai.use_rai_engine('cpSFtest0823');
++--------------+
+| cpSFtest0823 |
++--------------+
+call rai.use_rai_database('cpSFtesting0802');
++-----------------+
+| cpSFtesting0802 |
++-----------------+
+!load cpTriangleIntPairsTests.sql
+select get_database('cpSFtesting0802');
++-------------------------------------------------------------+
+| {                                                           |
+|   "account_name": "relationalai-team-rd",                   |
+|   "created_by": "6h4G1PBKxRymICTK15hDDQ2snodvAInu@clients", |
+|   "created_on": "2023-08-02T16:20:11.432Z",                 |
+|   "id": "006e21f2-cd76-594e-ac2d-449e54eebaf1",             |
+|   "name": "cpSFtesting0802",                                |
+|   "region": "us-east",                                      |
+|   "state": "CREATED"                                        |
+| }                                                           |
++-------------------------------------------------------------+
+create or replace table cptriangle.cpTriangleData(x int, y int) as select * from values (1,2),(2,3),(3,1),(4,5),(5,6),(6,4),(7,8),(8,9),(9,7),(10,11),(11,12),(12,10),(13,14),(14,15),(15,13),(16,17),(17,18),(18,16),(19,20),(20,21),(21,19),(22,23),(23,24),(24,22),(25,26),(26,27),(27,25),(28,29),(29,30),(30,28),(31,32),(32,33),(33,31),(34,35),(35,36),(36,34),(37,38),(38,39),(39,37),(40,41),(41,42),(42,40),(43,44),(44,45),(45,43),(46,47),(47,48),(48,46),(49,50),(50,51),(51,49),(49,1),(1,40),(40,49);
++--------------------------------------------+
+| Table CPTRIANGLEDATA successfully created. |
++--------------------------------------------+
+delete from cptriangle.cptriangledata where y > 40 or x > 40;
++----+
+| 14 |
++----+
+create or replace view cptriangle.cpTriangleDataView as select x, y from cptriangle.cpTriangleData;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+
+!set variable_substitution=true
+
+use WAREHOUSE COMPUTE_WH;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+USE DATABASE CPSFTESTING;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+
+!load setup.sql
+use schema RAI;
++----------------------------------+
+| Statement executed successfully. |
++----------------------------------+
+call rai.use_rai_engine('cpSFtest0823');
++--------------+
+| cpSFtest0823 |
++--------------+
+call rai.use_rai_database('cpSFtesting0802');
++-----------------+
+| cpSFtesting0802 |
++-----------------+
+!load cpTriangleIntPairsTests.sql
+select get_database('cpSFtesting0802');
++-------------------------------------------------------------+
+| {                                                           |
+|   "account_name": "relationalai-team-rd",                   |
+|   "created_by": "6h4G1PBKxRymICTK15hDDQ2snodvAInu@clients", |
+|   "created_on": "2023-08-02T16:20:11.432Z",                 |
+|   "id": "006e21f2-cd76-594e-ac2d-449e54eebaf1",             |
+|   "name": "cpSFtesting0802",                                |
+|   "region": "us-east",                                      |
+|   "state": "CREATED"                                        |
+| }                                                           |
++-------------------------------------------------------------+
+create or replace table cptriangle.cpTriangleData(x int, y int) as select * from values (1,2),(2,3),(3,1),(4,5),(5,6),(6,4),(7,8),(8,9),(9,7),(10,11),(11,12),(12,10),(13,14),(14,15),(15,13),(16,17),(17,18),(18,16),(19,20),(20,21),(21,19),(22,23),(23,24),(24,22),(25,26),(26,27),(27,25),(28,29),(29,30),(30,28),(31,32),(32,33),(33,31),(34,35),(35,36),(36,34),(37,38),(38,39),(39,37),(40,41),(41,42),(42,40),(43,44),(44,45),(45,43),(46,47),(47,48),(48,46),(49,50),(50,51),(51,49),(49,1),(1,40),(40,49);
++--------------------------------------------+
+| Table CPTRIANGLEDATA successfully created. |
++--------------------------------------------+
+delete from cptriangle.cptriangledata where y > 40 or x > 40;
++----+
+| 14 |
++----+
+create or replace view cptriangle.cpTriangleDataView as select x, y from cptriangle.cpTriangleData;
++-----------------------------------------------+
+| View CPTRIANGLEDATAVIEW successfully created. |
++-----------------------------------------------+
+select count (x, y) from cptriangle.cpTriangleDataView;
++----+
+| 40 |
++----+
+call rai.delete_data_stream('cpsftesting.cptriangle.cpTriangleDataView');
++------+
+| "ok" |
++------+
+call rai.delete_graph('cpTriangleDataGraph');
++------------------------------------------------------------------------------------------+
+| {                                                                                        |
+|   "message": "Graph 'cpTriangleDataGraph' removed from RAI database 'cpSFtesting0802'.", |
+|   "success": true                                                                        |
+| }                                                                                        |
++------------------------------------------------------------------------------------------+
+call rai.create_data_stream('cpTriangle.cpTriangleDataView');
++------------------------------------------------------------------------+
+| {                                                                      |
+|   "account": "relationalai-team-rd",                                   |
+|   "createdBy": "ZtyTHEFNE0R1AkA3B8d8X9j0241IaqEQ@clients",             |
+|   "createdOn": "2023-08-28T23:07:52.099Z",                             |
+|   "dbLink": "cpsftesting.rai",                                         |
+|   "id": "2c41ac86-fd2a-4074-899e-abd2fd99b193",                        |
+|   "integration": "cpsfintegration",                                    |
+|   "name": "cpsftesting.rai-cpsftesting.cptriangle.cptriangledataview", |
+|   "rai": {                                                             |
+|     "database": "cpSFtesting0802",                                     |
+|     "relation": "cpTriangleDataView"                                   |
+|   },                                                                   |
+|   "snowflake": {                                                       |
+|     "database": "cpsftesting",                                         |
+|     "object": "cpsftesting.cptriangle.cptriangledataview",             |
+|     "schema": "rai"                                                    |
+|   },                                                                   |
+|   "state": "CREATED"                                                   |
+| }                                                                      |
++------------------------------------------------------------------------+
+call rai.get_data_stream_status('cpsftesting.cptriangle.cpTriangleDataView');
++--------------------------------------------------+---------------------------------------------+
+| Source                                           | "cpsftesting.cptriangle.cptriangledataview" |
+| DB Link                                          | "cpsftesting.rai"                           |
+| Integration                                      | "cpsfintegration"                           |
+| Data sync status                                 | "Syncing: pending unloading from SF"        |
+| Data stream health                               | "Healthy"                                   |
+| Latest changes received from SF - SF unload time | NULL                                        |
+| Latest changes received from SF - Total rows     | NULL                                        |
+| Latest changes written to RAI - SF unload time   | NULL                                        |
+| Latest changes written to RAI - Load end time    | NULL                                        |
+| Latest changes written to RAI - Total rows       | NULL                                        |
++--------------------------------------------------+---------------------------------------------+
+CALL SYSTEM$WAIT(120);
++--------------------+
+| waited 120 seconds |
++--------------------+
+call rai.get_data_stream_status('cpsftesting.cptriangle.cpTriangleDataView');
++--------------------------------------------------+---------------------------------------------+
+| Source                                           | "cpsftesting.cptriangle.cptriangledataview" |
+| DB Link                                          | "cpsftesting.rai"                           |
+| Integration                                      | "cpsfintegration"                           |
+| Data sync status                                 | "Fully synced"                              |
+| Data stream health                               | "Healthy"                                   |
+| Latest changes received from SF - SF unload time | "2023-08-28 23:09:03.268"                   |
+| Latest changes received from SF - Total rows     | 40                                          |
+| Latest changes written to RAI - SF unload time   | "2023-08-28 23:09:03.268"                   |
+| Latest changes written to RAI - Load end time    | "2023-08-28 23:09:11.102"                   |
+| Latest changes written to RAI - Total rows       | 40                                          |
++--------------------------------------------------+---------------------------------------------+
+call rai.create_graph('cpTriangleDataGraph', 'cptriangle.cpTriangleDataView');
++----------------------------------------------------------------------------------------+
+| {                                                                                      |
+|   "message": "Graph 'cpTriangleDataGraph' created in RAI database 'cpSFtesting0802'.", |
+|   "success": true                                                                      |
+| }                                                                                      |
++----------------------------------------------------------------------------------------+
+// all graphlib functions with result_table
+
+SELECT rai.num_nodes('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleNumNodes' });
++--+
+| NULL |
++--+
+SELECT rai.num_edges('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleNumEdges' });
++--+
+| NULL |
++--+
+SELECT * from table(rai.adamic_adar('cpTriangleDataGraph', {'node1': [50, 1] , 'result_table': 'cpsftesting.cptriangle.cpTriangleAdemicAdar' }));
+++
+++
+SELECT * from table(rai.degree('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleDegree' }));
+++
+++
+SELECT * from table(rai.degree_histogram('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleDegreeHistogram' }));
+++
+++
+SELECT * from table(rai.common_neighbor('cpTriangleDataGraph', { 'node1': [40], 'result_table': 'cpsftesting.cptriangle.cpTriangleCommonNeighbor' }));
+++
+++
+SELECT * from table(rai.cosine_similarity('cpTriangleDataGraph', { 'node1': [1, 40], 'result_table': 'cpsftesting.cptriangle.cpTriangleCosineSimilarity'}));
+++
+++
+SELECT rai.average_degree('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleAverageDegree' });
++--+
+| NULL |
++--+
+SELECT * from table(rai.degree_centrality('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleDegreeCentrality' }));
+++
+++
+SELECT rai.diameter_range('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleDiameterRange' });
++------+
+| NULL |
++------+
+SELECT * from table(rai.eigenvector_centrality('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleEigenvectorCentrality' }));
+++
+++
+SELECT rai.is_connected('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleIsConnected' });
++------+
+| NULL |
++------+
+SELECT rai.is_graph_created('cpTriangleDataGraph');
++------+
+| True |
++------+
+SELECT * from table(rai.jaccard_similarity('cpTriangleDataGraph', { 'node1': [40, 50], 'result_table': 'cpsftesting.cptriangle.cpTriangleJaccardSimiliary' }));
+++
+++
+SELECT rai.max_degree('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleMaxDegree' });
++--+
+| NULL |
++--+
+SELECT rai.min_degree('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleMinDegree' });
++--+
+| NULL |
++--+
+SELECT * from table(rai.neighbor('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTriangleNeighbor' }));
+++
+++
+SELECT * from table(rai.neighbor('cpTriangleDataGraph', {'tuples': [[40, 41]], 'result_table': 'cpsftesting.cptriangle.cpTriangleNeighbor2' }));
+++
+++
+SELECT rai.node('cpTriangleDataGraph', [4, 7, 9, 2, 1]);
++---------------------+
+| 1757973406907125317 |
++---------------------+
+select * from table(rai.pagerank('cpTriangleDataGraph', { 'result_table': 'cpsftesting.cptriangle.cpTrianglePagerank' }));
+++
+++
+SELECT * from table(rai.preferential_attachment('cpTriangleDataGraph', {'node1': [40], 'result_table': 'cpsftesting.cptriangle.cpTrianglePreferentialAttachment' }));
+++
+++
+SELECT * from table(rai.shortest_path_length('cpTriangleDataGraph', {'source': 40, 'result_table': 'cpsftesting.cptriangle.cpTriangleShortestPathLength' }));
+++
+++
+SELECT * from table(rai.shortest_path_length('cpTriangleDataGraph', {'source': 8, 'target': 1, 'result_table': 'cpsftesting.cptriangle.cpTriangleShortestPathLength2' }));
+++
+++
+SELECT * from table(rai.shortest_path_length('cpTriangleDataGraph', {'tuples': [[1], [10, 11], [2, 4]], 'result_table': 'cpsftesting.cptriangle.cpTriangleShortestPathLength3' }));
+++
+++
+SELECT * from table(rai.transitive_closure('cpTriangleDataGraph', { 'source': 40, 'result_table': 'cpsftesting.cptriangle.cpTriangleTransitiveClosure' }));
