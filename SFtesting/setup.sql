@@ -1,4 +1,6 @@
 use schema RAI;
 
-call rai.use_rai_engine('cpSFtest0823');
-call rai.use_rai_database('cpSFtesting0802');
+set raiEngine = 'cpSFtest0927';
+set raiDatabase = 'cpSFtesting0927';
+call rai.use_rai_engine($raiEngine);
+call rai.use_rai_database($raiDatabase);

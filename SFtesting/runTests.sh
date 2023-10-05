@@ -4,7 +4,7 @@ set -e
 #set -x
 testToRun=$1
 
-echo "Test to run cpTriangleIntPairs and/or largeJson SF tests. Usage: ./runTests.sh cpTriangleIntPairs|largeJson|all"
+echo "*****************Test to run cpTriangleIntPairs and/or largeJson SF tests. Usage: ./runTests.sh cpTriangleIntPairs|largeJson|all*************************"
 
 if [ "$testToRun" != "all" ] && [ "$testToRun" != "cpTriangleIntPairs" ] && [ "$testToRun" != "largeJson" ]; then
 echo

@@ -6,5 +6,5 @@ use WAREHOUSE COMPUTE_WH;
 
 USE DATABASE CPSFTESTING;
 
-!load setup.sql
+!load setup2.sql
 !load cpTriangleIntPairsTests.sql
